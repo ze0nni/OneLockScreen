@@ -1,13 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UniRx;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RopeComponent : MonoBehaviour
 {
     public GameObject RopePrefab;
 
     private Stack<RopeSegmentComponent> segments = new Stack<RopeSegmentComponent>();
+
+    readonly private Subject<int[]> passwordSubject = new Subject<int[]>();
+    public IObservable<int[]> password { get => passwordSubject; }
+
+    private void Start()
+    {
+        UpdatePassword();
+    }
 
     private void Update()
     {
@@ -53,6 +64,8 @@ public class RopeComponent : MonoBehaviour
 
         segments.Push(ropeSegment);
 
+        UpdatePassword();
+
         return ropeSegment;
     }
 
@@ -60,5 +73,12 @@ public class RopeComponent : MonoBehaviour
         while (segments.Count != 0) {
             segments.Pop().Remove();
         }
+        UpdatePassword();
+    }
+
+    void UpdatePassword() {
+        passwordSubject.OnNext(
+            segments.Select(s => s.dot.DotIndex).Reverse().ToArray()
+        );
     }
 }
