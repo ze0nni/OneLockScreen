@@ -5,13 +5,7 @@ using UnityEngine.EventSystems;
 
 public class LocketScreenDotComponent : MonoBehaviour
 {
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        
-    }
+    public Sprite CommonDot;
+    public Sprite ActiveDot;
+    public Sprite RejectedDot;
 }
