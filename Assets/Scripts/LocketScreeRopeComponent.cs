@@ -5,65 +5,9 @@ using UnityEngine;
 
 public class LocketScreeRopeComponent : MonoBehaviour
 {
-    #region Inner classes 
-
-
-    class Segment
-    {
-        readonly public LocketScreenDotComponent dot;
-        readonly public GameObject rope;
-
-        public Segment(LocketScreenDotComponent dot, GameObject rope)
-        {
-            this.dot = dot;
-            this.rope = rope;
-
-            Move(0, 0);
-        }
-
-        public void Move(LocketScreenDotComponent dot)
-        {
-            var dotTransform = dot.GetComponent<RectTransform>();
-            Move(dotTransform.position.x, dotTransform.position.y);
-        }
-
-        public void Move(float x, float y) {
-            var dotTransform = dot.GetComponent<RectTransform>();
-            var ropeTransform = rope.GetComponent<RectTransform>();
-
-            var dotCenter = dotTransform.position;
-
-            ropeTransform.position = dotCenter;
-
-            ropeTransform.transform.rotation = Quaternion.Euler(
-                0,
-                0,
-                Mathf.Atan2(y - dotCenter.y, x- dotCenter.x) * Mathf.Rad2Deg
-            );
-
-            var distance = Vector2.Distance(dotCenter, new Vector2(x, y));
-            ropeTransform.sizeDelta = new Vector2(
-                distance + ropeTransform.rect.height,
-                ropeTransform.rect.height
-            );
-
-            ropeTransform.pivot = new Vector2(
-                (ropeTransform.rect.height / ropeTransform.rect.width) * 0.5f,
-                0.5f
-            );
-        }
-
-        public void Remove() {
-            dot.UpdateState(false);
-            DestroyObject(rope);
-        }
-    }
-
-#endregion
-
     public GameObject RopePrefab;
 
-    private Stack<Segment> segments = new Stack<Segment>();
+    private Stack<LockScreeRopeSegmentComponent> segments = new Stack<LockScreeRopeSegmentComponent>();
 
     private void Update()
     {
@@ -97,23 +41,19 @@ public class LocketScreeRopeComponent : MonoBehaviour
         PushSegment(dot);
     }
 
-    private Segment PushSegment(LocketScreenDotComponent dot) {
+    private LockScreeRopeSegmentComponent PushSegment(LocketScreenDotComponent dot) {
         if (segments.Count != 0) {
             var topSegment = segments.Peek();
             topSegment.Move(dot);
         }
-        var dotTransform = dot.GetComponent<RectTransform>();
+        var ropeSegmentGo = Instantiate(RopePrefab, this.transform);
 
-        var ropeGo = Instantiate(RopePrefab);
-        ropeGo.transform.SetParent(this.transform);
+        var ropeSegment = ropeSegmentGo.GetComponent<LockScreeRopeSegmentComponent>();
+        ropeSegment.dot = dot;
 
-        var ropeTransform = ropeGo.GetComponent<RectTransform>();
-        ropeTransform.position = dotTransform.position;
+        segments.Push(ropeSegment);
 
-        var segment = new Segment(dot, ropeGo);
-        segments.Push(segment);
-
-        return segment;
+        return ropeSegment;
     }
 
     private void ClearSegments() {
