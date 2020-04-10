@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LocketScreeRopeComponent : MonoBehaviour
+public class RopeComponent : MonoBehaviour
 {
     public GameObject RopePrefab;
 
-    private Stack<LockScreeRopeSegmentComponent> segments = new Stack<LockScreeRopeSegmentComponent>();
+    private Stack<RopeSegmentComponent> segments = new Stack<RopeSegmentComponent>();
 
     private void Update()
     {
@@ -30,7 +30,7 @@ public class LocketScreeRopeComponent : MonoBehaviour
         );
     }
 
-    internal void DotEventHandler(LocketScreenDotComponent dot)
+    internal void DotEventHandler(DotComponent dot)
     {
         if (!Input.GetMouseButton(0)) {
             return;
@@ -41,14 +41,14 @@ public class LocketScreeRopeComponent : MonoBehaviour
         PushSegment(dot);
     }
 
-    private LockScreeRopeSegmentComponent PushSegment(LocketScreenDotComponent dot) {
+    private RopeSegmentComponent PushSegment(DotComponent dot) {
         if (segments.Count != 0) {
             var topSegment = segments.Peek();
             topSegment.Move(dot);
         }
         var ropeSegmentGo = Instantiate(RopePrefab, this.transform);
 
-        var ropeSegment = ropeSegmentGo.GetComponent<LockScreeRopeSegmentComponent>();
+        var ropeSegment = ropeSegmentGo.GetComponent<RopeSegmentComponent>();
         ropeSegment.dot = dot;
 
         segments.Push(ropeSegment);

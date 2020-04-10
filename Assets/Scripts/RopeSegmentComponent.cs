@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LockScreeRopeSegmentComponent : MonoBehaviour
+public class RopeSegmentComponent : MonoBehaviour
 {
-    public LocketScreenDotComponent dot;
+    public DotComponent dot;
 
     private void Start()
     {
@@ -13,7 +13,7 @@ public class LockScreeRopeSegmentComponent : MonoBehaviour
         Move(dotTransform.position.x, dotTransform.position.y);
     }
 
-    public void Move(LocketScreenDotComponent dot)
+    public void Move(DotComponent dot)
     {
         var dotTransform = dot.GetComponent<RectTransform>();
         Move(dotTransform.position.x, dotTransform.position.y);

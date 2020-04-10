@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LocketScreenDotComponent
+public class DotComponent
     : MonoBehaviour
     , IPointerEnterHandler
     , IPointerDownHandler
@@ -15,8 +15,8 @@ public class LocketScreenDotComponent
     public int DotIndex;
     public bool State { get; private set; }
 
-    public UnityAction<LocketScreenDotComponent> OnPointerEntered;
-    public UnityAction<LocketScreenDotComponent> OnPointerPressed;
+    public UnityAction<DotComponent> OnPointerEntered;
+    public UnityAction<DotComponent> OnPointerPressed;
 
     private Image image;
 
