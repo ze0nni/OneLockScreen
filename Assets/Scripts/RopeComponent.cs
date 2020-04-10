@@ -30,7 +30,7 @@ public class RopeComponent : MonoBehaviour
         );
     }
 
-    internal void DotEventHandler(DotComponent dot)
+    internal void OnDotInteract(DotComponent dot)
     {
         if (!Input.GetMouseButton(0)) {
             return;

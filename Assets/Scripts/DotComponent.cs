@@ -15,8 +15,7 @@ public class DotComponent
     public int DotIndex;
     public bool State { get; private set; }
 
-    public UnityAction<DotComponent> OnPointerEntered;
-    public UnityAction<DotComponent> OnPointerPressed;
+    public UnityAction<DotComponent> OnInteract;
 
     private Image image;
 
@@ -30,7 +29,7 @@ public class DotComponent
     {
         if (!State)
         {
-            OnPointerEntered?.Invoke(this);
+            OnInteract?.Invoke(this);
         }
     }
 
@@ -38,7 +37,7 @@ public class DotComponent
     {
         if (!State)
         {
-            OnPointerPressed?.Invoke(this);
+            OnInteract?.Invoke(this);
         }
     }
 

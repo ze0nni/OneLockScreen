@@ -25,8 +25,7 @@ public class LockScreenComponent : MonoBehaviour
 
                 var dot = dotGo.GetComponent<DotComponent>();
                 dot.DotIndex = dotIndex;
-                dot.OnPointerPressed += this.rope.DotEventHandler;
-                dot.OnPointerEntered += this.rope.DotEventHandler;
+                dot.OnInteract += this.rope.OnDotInteract;
 
                 var transform = dotGo.GetComponent<RectTransform>();
                 transform.position = new Vector2(x, y) * DotsDistance + dotsOrigin;
