@@ -9,3 +9,22 @@ public class LocketScreenDotComponent : MonoBehaviour
     public Sprite ActiveDot;
     public Sprite RejectedDot;
 }
+    public bool State { get; private set; }
+
+    private Image image;
+
+    void Start() {
+        this.image = GetComponent<Image>();
+
+        UpdateState(false);
+    }
+
+    public void UpdateState(bool value) {
+        this.image.sprite = value
+            ? this.ActiveDot
+            : this.CommonDot
+            ;
+
+        this.State = value;
+    }
+}
