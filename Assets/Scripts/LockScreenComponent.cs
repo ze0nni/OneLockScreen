@@ -12,17 +12,32 @@ public class LockScreenComponent : MonoBehaviour
     void Start() {
         var dotsOrigin = getDotsOrigin();
 
+        var dotIndex = 0;
         for (var x = 0; x < size; x ++) {
             for (var y = 0; y < size; y++) {
                 var dotGo = Instantiate(DotPrefab);
                 dotGo.transform.SetParent(this.transform, false);
 
                 var dot = dotGo.GetComponent<LocketScreenDotComponent>();
+                dot.DotIndex = dotIndex;
+                dot.OnPointerPressed += OnPointerPressed;
+                dot.OnPointerEntered += OnPointerEntered;
 
                 var transform = dotGo.GetComponent<RectTransform>();
-                transform.position = new Vector2(x, y) * DotsDistance + dotsOrigin; ;
+                transform.position = new Vector2(x, y) * DotsDistance + dotsOrigin;
+
+                dotIndex++;
             }
         }
+    }
+
+    private void OnPointerPressed(LocketScreenDotComponent dot) {
+        
+    }
+
+    private void OnPointerEntered(LocketScreenDotComponent dot)
+    {
+        
     }
 
     private Vector2 getDotsOrigin() {

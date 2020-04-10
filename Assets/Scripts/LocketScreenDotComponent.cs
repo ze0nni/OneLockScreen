@@ -1,15 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class LocketScreenDotComponent : MonoBehaviour
+public class LocketScreenDotComponent
+    : MonoBehaviour
+    , IPointerEnterHandler
+    , IPointerDownHandler
 {
     public Sprite CommonDot;
     public Sprite ActiveDot;
     public Sprite RejectedDot;
-}
+
+    public int DotIndex;
     public bool State { get; private set; }
+
+    public UnityAction<LocketScreenDotComponent> OnPointerEntered;
+    public UnityAction<LocketScreenDotComponent> OnPointerPressed;
 
     private Image image;
 
@@ -17,6 +24,22 @@ public class LocketScreenDotComponent : MonoBehaviour
         this.image = GetComponent<Image>();
 
         UpdateState(false);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!State)
+        {
+            OnPointerEntered?.Invoke(this);
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (!State)
+        {
+            OnPointerPressed?.Invoke(this);
+        }
     }
 
     public void UpdateState(bool value) {
