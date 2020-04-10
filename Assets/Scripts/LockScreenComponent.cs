@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
+[RequireComponent(typeof(LocketScreeRopeComponent))]
 public class LockScreenComponent : MonoBehaviour
 {
     public GameObject DotPrefab;
@@ -9,7 +10,11 @@ public class LockScreenComponent : MonoBehaviour
 
     readonly private int size = 3;
 
+    private LocketScreeRopeComponent rope;
+
     void Start() {
+        this.rope = GetComponent<LocketScreeRopeComponent>();
+
         var dotsOrigin = getDotsOrigin();
 
         var dotIndex = 0;
@@ -20,8 +25,8 @@ public class LockScreenComponent : MonoBehaviour
 
                 var dot = dotGo.GetComponent<LocketScreenDotComponent>();
                 dot.DotIndex = dotIndex;
-                dot.OnPointerPressed += OnPointerPressed;
-                dot.OnPointerEntered += OnPointerEntered;
+                dot.OnPointerPressed += this.rope.DotEventHandler;
+                dot.OnPointerEntered += this.rope.DotEventHandler;
 
                 var transform = dotGo.GetComponent<RectTransform>();
                 transform.position = new Vector2(x, y) * DotsDistance + dotsOrigin;
@@ -29,15 +34,6 @@ public class LockScreenComponent : MonoBehaviour
                 dotIndex++;
             }
         }
-    }
-
-    private void OnPointerPressed(LocketScreenDotComponent dot) {
-        
-    }
-
-    private void OnPointerEntered(LocketScreenDotComponent dot)
-    {
-        
     }
 
     private Vector2 getDotsOrigin() {
