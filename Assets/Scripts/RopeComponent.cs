@@ -15,8 +15,12 @@ public class RopeComponent : MonoBehaviour
     readonly private Subject<int[]> passwordSubject = new Subject<int[]>();
     public IObservable<int[]> password { get => passwordSubject; }
 
+    private RectTransform rect;
+
     private void Start()
     {
+        this.rect = GetComponent<RectTransform>();
+
         UpdatePassword();
     }
 
@@ -33,11 +37,19 @@ public class RopeComponent : MonoBehaviour
         }
 
         var segment = segments.Peek();
+        
+        //TIP: Pass null for 'camera'. May be problem in future
+        var mousePosition = new Vector2();
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rect,
+            new Vector2(Input.mousePosition.x, Input.mousePosition.y),
+            null,
+            out mousePosition
+        );
 
-        //Looks like canvas and window coordinates always match
         segment.Move(
-            Input.mousePosition.x,
-            Input.mousePosition.y
+            mousePosition.x,
+            mousePosition.y
         );
     }
 

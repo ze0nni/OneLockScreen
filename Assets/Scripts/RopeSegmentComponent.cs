@@ -8,15 +8,13 @@ public class RopeSegmentComponent : MonoBehaviour
 
     private void Start()
     {
-        var dotTransform = dot.GetComponent<RectTransform>();
-
-        Move(dotTransform.position.x, dotTransform.position.y);
+        Move(dot);
     }
 
     public void Move(DotComponent dot)
     {
         var dotTransform = dot.GetComponent<RectTransform>();
-        Move(dotTransform.position.x, dotTransform.position.y);
+        Move(dotTransform.localPosition.x, dotTransform.localPosition.y);
     }
 
     public void Move(float x, float y)
@@ -24,9 +22,9 @@ public class RopeSegmentComponent : MonoBehaviour
         var dotTransform = dot.GetComponent<RectTransform>();
         var ropeTransform = this.GetComponent<RectTransform>();
 
-        var dotCenter = dotTransform.position;
+        var dotCenter = dotTransform.localPosition;
 
-        ropeTransform.position = dotCenter;
+        ropeTransform.localPosition = dotCenter;
 
         ropeTransform.transform.rotation = Quaternion.Euler(
             0,

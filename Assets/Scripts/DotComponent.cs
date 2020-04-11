@@ -35,6 +35,8 @@ public class DotComponent
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        var transform = GetComponent<RectTransform>();
+
         if (!State)
         {
             OnInteract?.Invoke(this);
