@@ -6,7 +6,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RopeComponent : MonoBehaviour
+public class Rope : MonoBehaviour
 {
     enum RopeState {
         // Wait for user interact
@@ -21,7 +21,7 @@ public class RopeComponent : MonoBehaviour
 
     public GameObject RopePrefab;
 
-    private Stack<RopeSegmentComponent> segments = new Stack<RopeSegmentComponent>();
+    private Stack<RopeSegment> segments = new Stack<RopeSegment>();
     private RopeState state = RopeState.Ready;
 
     readonly private Subject<int[]> passwordSubject = new Subject<int[]>();
@@ -78,7 +78,7 @@ public class RopeComponent : MonoBehaviour
         }
     }
 
-    internal void OnDotInteract(DotComponent dot)
+    internal void OnDotInteract(Dot dot)
     {
         if (this.state != RopeState.Ready) {
             return;
@@ -92,14 +92,14 @@ public class RopeComponent : MonoBehaviour
         PushSegment(dot);
     }
 
-    private RopeSegmentComponent PushSegment(DotComponent dot) {
+    private RopeSegment PushSegment(Dot dot) {
         if (segments.Count != 0) {
             var topSegment = segments.Peek();
             topSegment.Move(dot);
         }
         var ropeSegmentGo = Instantiate(RopePrefab, this.transform);
 
-        var ropeSegment = ropeSegmentGo.GetComponent<RopeSegmentComponent>();
+        var ropeSegment = ropeSegmentGo.GetComponent<RopeSegment>();
         ropeSegment.dot = dot;
 
         segments.Push(ropeSegment);

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RopeSegmentComponent : MonoBehaviour
+public class RopeSegment : MonoBehaviour
 {
-    public DotComponent dot;
+    public Dot dot;
 
     private void Start()
     {
         Move(dot);
     }
 
-    public void Move(DotComponent dot)
+    public void Move(Dot dot)
     {
         var dotTransform = dot.GetComponent<RectTransform>();
         Move(dotTransform.localPosition.x, dotTransform.localPosition.y);

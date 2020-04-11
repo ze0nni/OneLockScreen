@@ -34,7 +34,7 @@ public class PassworcInspector : MonoBehaviour
         end
     ";
 
-    public RopeComponent rope;
+    public Rope rope;
 
     private Script script;
     private DynValue ResolverFunc;

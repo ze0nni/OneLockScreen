@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DotComponent
+public class Dot
     : MonoBehaviour
     , IPointerEnterHandler
     , IPointerDownHandler
@@ -16,7 +16,7 @@ public class DotComponent
     public int DotIndex;
     public bool State { get; private set; }
 
-    public UnityAction<DotComponent> OnInteract;
+    public UnityAction<Dot> OnInteract;
 
     private Image image;
 

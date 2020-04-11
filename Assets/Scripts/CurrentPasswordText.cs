@@ -6,15 +6,15 @@ using UniRx;
 using UnityEngine.UI;
 using System;
 
-[RequireComponent(typeof(RopeComponent))]
-public class CurrentPasswordTextComponent : MonoBehaviour
+[RequireComponent(typeof(Rope))]
+public class CurrentPasswordText : MonoBehaviour
 {
     public Text text;
 
     private IDisposable subscribe;
 
     void OnEnable() {
-        var rope = GetComponent<RopeComponent>();
+        var rope = GetComponent<Rope>();
 
         this.subscribe = rope.currentPassword.Subscribe(p =>
         {

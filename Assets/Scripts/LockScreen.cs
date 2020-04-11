@@ -2,18 +2,18 @@
 using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
-[RequireComponent(typeof(RopeComponent))]
-public class LockScreenComponent : MonoBehaviour
+[RequireComponent(typeof(Rope))]
+public class LockScreen : MonoBehaviour
 {
     public GameObject DotPrefab;
     public float DotsDistance = 120f;
 
     readonly private int size = 3;
 
-    private RopeComponent rope;
+    private Rope rope;
 
     void Start() {
-        this.rope = GetComponent<RopeComponent>();
+        this.rope = GetComponent<Rope>();
 
         var dotsOrigin = new Vector2(
             -((size - 1) * DotsDistance) / 2f,
@@ -26,7 +26,7 @@ public class LockScreenComponent : MonoBehaviour
                 var dotGo = Instantiate(DotPrefab);
                 dotGo.transform.SetParent(this.transform, false);
 
-                var dot = dotGo.GetComponent<DotComponent>();
+                var dot = dotGo.GetComponent<Dot>();
                 dot.DotIndex = dotIndex;
                 dot.OnInteract += this.rope.OnDotInteract;
 
