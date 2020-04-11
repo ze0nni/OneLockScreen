@@ -21,8 +21,8 @@ public class Rope : MonoBehaviour
 
     public GameObject RopePrefab;
 
-    private Stack<RopeSegment> segments = new Stack<RopeSegment>();
     private RopeState state = RopeState.Ready;
+    private Stack<RopeSegment> segments = new Stack<RopeSegment>();
 
     readonly private Subject<int[]> passwordSubject = new Subject<int[]>();
     public IObservable<int[]> password { get => passwordSubject; }
@@ -40,6 +40,15 @@ public class Rope : MonoBehaviour
 
     private void Update()
     {
+        if (this.state == RopeState.Ready && Input.GetMouseButtonUp(0))
+        {
+            this.state = RopeState.Completed;
+
+            UpdatePassword();
+            
+            return;
+        }
+    
         if (this.state == RopeState.Rejected) {
             DoReject();
             this.state = RopeState.Ready;
@@ -49,13 +58,6 @@ public class Rope : MonoBehaviour
         {
             DoResole();
             this.state = RopeState.Ready;
-        }
-
-        if (this.state == RopeState.Ready && Input.GetMouseButtonUp(0)) {
-            this.state = RopeState.Completed;
-
-            UpdatePassword();
-            return;
         }
 
         if (this.state == RopeState.Ready && segments.Count > 0)
@@ -117,7 +119,7 @@ public class Rope : MonoBehaviour
     }
 
     public void Reject() {
-        // Int wrong to call passwordSubject.OnNext here
+        // Its wrong to call passwordSubject.OnNext here
         if (this.state == RopeState.Completed) {
             this.state = RopeState.Rejected;
         }
@@ -134,7 +136,7 @@ public class Rope : MonoBehaviour
 
     public void Resolve()
     {
-        // Int wrong to call passwordSubject.OnNext here
+        // Its wrong to call passwordSubject.OnNext here
         if (this.state == RopeState.Completed)
         {
             this.state = RopeState.Resolved;
