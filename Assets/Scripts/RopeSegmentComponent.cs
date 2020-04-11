@@ -50,4 +50,11 @@ public class RopeSegmentComponent : MonoBehaviour
 
         DestroyObject(gameObject);
     }
+
+    public void Reject()
+    {
+        dot.UpdateState(false);
+
+        DestroyObject(gameObject);
+    }
 }

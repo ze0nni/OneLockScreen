@@ -8,9 +8,18 @@ using UnityEngine.Events;
 
 public class RopeComponent : MonoBehaviour
 {
+    enum RopeState {
+        Ready,
+        Rejected,
+        Completed
+    }
+
     public GameObject RopePrefab;
 
     private Stack<RopeSegmentComponent> segments = new Stack<RopeSegmentComponent>();
+    private RopeState state = RopeState.Ready;
+    // Stop interact until GetMouseButtonUp
+    private bool stopForMouseInteract = false;
 
     readonly private Subject<int[]> passwordSubject = new Subject<int[]>();
     public IObservable<int[]> password { get => passwordSubject; }
@@ -26,6 +35,15 @@ public class RopeComponent : MonoBehaviour
 
     private void Update()
     {
+        if (stopForMouseInteract && Input.GetMouseButtonUp(0)) {
+            stopForMouseInteract = false;
+        }
+
+        if (this.state == RopeState.Rejected) {
+            DoReject();
+            this.state = RopeState.Ready;
+        }
+
         if (segments.Count == 0) {
             return;
         }
@@ -55,6 +73,10 @@ public class RopeComponent : MonoBehaviour
 
     internal void OnDotInteract(DotComponent dot)
     {
+        if (this.stopForMouseInteract || this.state != RopeState.Ready) {
+            return;
+        }
+
         if (!Input.GetMouseButton(0)) {
             return;
         }
@@ -87,6 +109,25 @@ public class RopeComponent : MonoBehaviour
         }
         UpdatePassword();
     }
+
+    public void Reject() {
+        // Int wrong to call passwordSubject.OnNext here
+        if (this.state == RopeState.Ready) {
+            this.state = RopeState.Rejected;
+        }
+        stopForMouseInteract = true;
+    }
+
+    // Call only from update
+    private void DoReject() {
+        while (segments.Count != 0)
+        {
+            segments.Pop().Reject();
+        }
+        UpdatePassword();
+    }
+
+    //
 
     void UpdatePassword() {
         passwordSubject.OnNext(
