@@ -16,7 +16,7 @@ public class CurrentPasswordTextComponent : MonoBehaviour
     void OnEnable() {
         var rope = GetComponent<RopeComponent>();
 
-        this.subscribe = rope.password.Subscribe(p =>
+        this.subscribe = rope.currentPassword.Subscribe(p =>
         {
             text.text = string.Join("-", p);
         });

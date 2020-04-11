@@ -9,8 +9,13 @@ using UnityEngine.Events;
 public class RopeComponent : MonoBehaviour
 {
     enum RopeState {
+        // Wait for user interact
         Ready,
+        // Will rejected for next update
         Rejected,
+        // Will resolved for next update
+        Resolved,
+        // Wait for Resolve() or Reject()
         Completed
     }
 
@@ -18,11 +23,11 @@ public class RopeComponent : MonoBehaviour
 
     private Stack<RopeSegmentComponent> segments = new Stack<RopeSegmentComponent>();
     private RopeState state = RopeState.Ready;
-    // Stop interact until GetMouseButtonUp
-    private bool stopForMouseInteract = false;
 
     readonly private Subject<int[]> passwordSubject = new Subject<int[]>();
     public IObservable<int[]> password { get => passwordSubject; }
+    readonly private Subject<int[]> currentPasswordSubject = new Subject<int[]>();
+    public IObservable<int[]> currentPassword { get => currentPasswordSubject; }
 
     private RectTransform rect;
 
@@ -35,48 +40,49 @@ public class RopeComponent : MonoBehaviour
 
     private void Update()
     {
-        if (stopForMouseInteract && Input.GetMouseButtonUp(0)) {
-            stopForMouseInteract = false;
-        }
-
         if (this.state == RopeState.Rejected) {
             DoReject();
             this.state = RopeState.Ready;
         }
 
-        if (segments.Count == 0) {
+        if (this.state == RopeState.Resolved)
+        {
+            DoResole();
+            this.state = RopeState.Ready;
+        }
+
+        if (this.state == RopeState.Ready && Input.GetMouseButtonUp(0)) {
+            this.state = RopeState.Completed;
+
+            UpdatePassword();
             return;
         }
 
-        if (!Input.GetMouseButton(0)) {
-            ClearSegments();
+        if (this.state == RopeState.Ready && segments.Count > 0)
+        {
+            var segment = segments.Peek();
 
-            return;
+            //TIP: Pass null for 'camera'. May be problem in future
+            var mousePosition = new Vector2();
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rect,
+                new Vector2(Input.mousePosition.x, Input.mousePosition.y),
+                null,
+                out mousePosition
+            );
+
+            segment.Move(
+                mousePosition.x,
+                mousePosition.y
+            );
         }
-
-        var segment = segments.Peek();
-        
-        //TIP: Pass null for 'camera'. May be problem in future
-        var mousePosition = new Vector2();
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            rect,
-            new Vector2(Input.mousePosition.x, Input.mousePosition.y),
-            null,
-            out mousePosition
-        );
-
-        segment.Move(
-            mousePosition.x,
-            mousePosition.y
-        );
     }
 
     internal void OnDotInteract(DotComponent dot)
     {
-        if (this.stopForMouseInteract || this.state != RopeState.Ready) {
+        if (this.state != RopeState.Ready) {
             return;
         }
-
         if (!Input.GetMouseButton(0)) {
             return;
         }
@@ -98,7 +104,7 @@ public class RopeComponent : MonoBehaviour
 
         segments.Push(ropeSegment);
 
-        UpdatePassword();
+        UpdateCurrentPassword();
 
         return ropeSegment;
     }
@@ -112,10 +118,9 @@ public class RopeComponent : MonoBehaviour
 
     public void Reject() {
         // Int wrong to call passwordSubject.OnNext here
-        if (this.state == RopeState.Ready) {
+        if (this.state == RopeState.Completed) {
             this.state = RopeState.Rejected;
         }
-        stopForMouseInteract = true;
     }
 
     // Call only from update
@@ -127,10 +132,36 @@ public class RopeComponent : MonoBehaviour
         UpdatePassword();
     }
 
+    public void Resolve()
+    {
+        // Int wrong to call passwordSubject.OnNext here
+        if (this.state == RopeState.Completed)
+        {
+            this.state = RopeState.Resolved;
+        }
+    }
+
+    // Call only from update
+    private void DoResole()
+    {
+        while (segments.Count != 0)
+        {
+            segments.Pop().Reject();
+        }
+        UpdatePassword();
+    }
+
     //
 
     void UpdatePassword() {
         passwordSubject.OnNext(
+            segments.Select(s => s.dot.DotIndex).Reverse().ToArray()
+        );
+        UpdateCurrentPassword();
+    }
+
+    void UpdateCurrentPassword() {
+        currentPasswordSubject.OnNext(
             segments.Select(s => s.dot.DotIndex).Reverse().ToArray()
         );
     }
