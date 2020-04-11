@@ -127,7 +127,7 @@ public class RopeComponent : MonoBehaviour
     private void DoReject() {
         while (segments.Count != 0)
         {
-            segments.Pop().Reject();
+            segments.Pop().Remove(false);
         }
         UpdatePassword();
     }
@@ -146,7 +146,7 @@ public class RopeComponent : MonoBehaviour
     {
         while (segments.Count != 0)
         {
-            segments.Pop().Reject();
+            segments.Pop().Remove(true);
         }
         UpdatePassword();
     }

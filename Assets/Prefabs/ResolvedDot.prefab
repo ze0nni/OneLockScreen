@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4857185379242755635}
   - component: {fileID: 3441023817123954809}
   - component: {fileID: 3007612412995254615}
-  - component: {fileID: 114827424822475998}
+  - component: {fileID: 8237858164084204500}
   m_Layer: 5
-  m_Name: LockScreenDot
+  m_Name: ResolvedDot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,11 +60,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 1bae53004a300fa44bba9267c2800bf9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &114827424822475998
+--- !u!114 &8237858164084204500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,13 +82,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3491937845574460563}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db1d0ad457b1cbd41a43df2dacd07e97, type: 3}
+  m_Script: {fileID: 11500000, guid: ae46e50434d7aa24f90549960c345ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CommonDot: {fileID: 21300000, guid: ddb82974aa183a44e8a2023f483a373b, type: 3}
-  ActiveDot: {fileID: 21300000, guid: ae483aeb7fea7174ca3071394f2a2589, type: 3}
-  ResolvedDotPrefab: {fileID: 3491937845574460563, guid: 9d5ffc16654fb5246aa0d983d793f058,
-    type: 3}
-  RejectedDotPrefab: {fileID: 3491937845574460563, guid: 72789bf0beee44f41a2cd224b23319e5,
-    type: 3}
-  DotIndex: 0
+  LifeTime: 0.5

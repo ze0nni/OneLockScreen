@@ -51,9 +51,10 @@ public class RopeSegmentComponent : MonoBehaviour
         DestroyObject(gameObject);
     }
 
-    public void Reject()
+    public void Remove(bool successed)
     {
         dot.UpdateState(false);
+        dot.FlyAwayEffect(successed);
 
         DestroyObject(gameObject);
     }

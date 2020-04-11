@@ -10,7 +10,8 @@ public class DotComponent
 {
     public Sprite CommonDot;
     public Sprite ActiveDot;
-    public Sprite RejectedDot;
+    public GameObject ResolvedDotPrefab;
+    public GameObject RejectedDotPrefab;
 
     public int DotIndex;
     public bool State { get; private set; }
@@ -50,5 +51,16 @@ public class DotComponent
             ;
 
         this.State = value;
+    }
+
+    public void FlyAwayEffect(bool successed) {
+        var rejectetDot = Instantiate(
+            successed ?  ResolvedDotPrefab : RejectedDotPrefab, 
+            transform.parent);
+
+        var dotTransform = this.GetComponent<RectTransform>();
+        var rejectetDotTransform = rejectetDot.GetComponent <RectTransform> ();
+
+        rejectetDotTransform.localPosition = dotTransform.localPosition;
     }
 }
